@@ -111,8 +111,8 @@
           </div>
         </div>
         <div class="lp-map">
-          <iframe title="Texas Backyard location" loading="lazy"
-            src="https://www.google.com/maps?q=Christaki%20Kranou%2031%20Germasogeia%204041%20Cyprus&output=embed"></iframe>
+          <iframe title="Texas Backyard location" loading="lazy" tabindex="-1"
+            data-src="https://www.google.com/maps?q=Christaki%20Kranou%2031%20Germasogeia%204041%20Cyprus&output=embed"></iframe>
         </div>
       </div>
     </div>
@@ -130,5 +130,23 @@
     <a class="btn btn--call" href="tel:+35799378064">📞 Call</a>
     <a class="btn btn--gold" href="https://wa.me/35799378064">Order on WhatsApp</a>
   </div>
+
+  <script>
+    /* Load the map only when scrolled near it, so its iframe can't grab focus
+       and yank the page down on (re)load. */
+    (function () {
+      var f = document.querySelector("iframe[data-src]");
+      if (!f) return;
+      var load = function () { if (f.dataset.src) { f.src = f.dataset.src; delete f.dataset.src; } };
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          if (entries.some(function (e) { return e.isIntersecting; })) { load(); io.disconnect(); }
+        }, { rootMargin: "300px" });
+        io.observe(f);
+      } else {
+        window.addEventListener("load", load);
+      }
+    })();
+  </script>
 </body>
 </html>
